@@ -1,32 +1,77 @@
-a #include <ctype.h>
+#include <ctype.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 
 /*
 Ejercicio 1: Encuentra el Elemento Mayor
 Descripción: Escribe una función que tome un arreglo de enteros
 y su tamaño, y devuelva el valor más grande del arreglo.
 */
-int findMax(int arr[], int size) { return 0; }
+int findMax(int arr[], int size) {
+
+  int mayor = 0;
+
+  for (int i = 0; i < size; i++) {
+    if (arr[i] > mayor) {
+      mayor = arr[i];
+    }
+  }
+  return mayor;
+}
 
 /*
 Ejercicio 2: Invertir un Arreglo
 Descripción: Escribe una función que tome un arreglo y su tamaño, y luego
 invierta el orden de sus elementos.
 */
-void reverseArray(int arr[], int size) {}
+void reverseArray(int arr[], int size) {
+
+  int arr2[size];
+
+  for (int i = 0; i < size; i++) {
+    arr2[i] = arr[size - i - 1];
+  }
+  arr = arr2;
+}
 
 /*
 Ejercicio 3: Filtrar Números Pares
 Descripción: Escribe una función que tome un arreglo de enteros
 y su tamaño, y luego devuelva un nuevo arreglo que contenga solo
 los números pares del arreglo original.
-newsize apunta a una dirección válida que no ha sido inicializada con nigún valor específico. 
-*newsize debe almacenar el tamaño del nuevo arreglo que se retorna.
+newsize apunta a una dirección válida que no ha sido inicializada con nigún
+valor específico. *newsize debe almacenar el tamaño del nuevo arreglo que se
+retorna.
 */
-int *filterEvenNumbers(int arr[], int size, int *newSize) { return NULL; }
+int *filterEvenNumbers(int arr[], int size, int *newSize) {
+  
+  int *arr2;
+  int contador = 0;
+
+  for (int i = 0; i < size; i++) {
+    if (arr[i] % 2 == 0) {
+      contador++;
+    }
+  }
+
+  arr2 = (int *)malloc(contador * sizeof(int));
+
+  int j = 0;
+
+  for (int i = 0; i < size; i++) {
+    if (arr[i] % 2 == 0) {
+      arr2[j] = arr[i];
+      j++;
+    }
+  }
+
+  *newSize = contador;
+
+  return arr2;
+}
 
 /*
 Ejercicio 4: Fusión de dos Arreglos Ordenados
@@ -34,8 +79,19 @@ Descripción: Escribe una función que tome dos arreglos
 ordenados de menor a mayor y sus tamaños, y luego fusione estos dos
 arreglos en un tercer arreglo también ordenado de menor a mayor.
 */
-void mergeSortedArrays(int arr1[], int size1, int arr2[], int size2,
-                       int result[]) {}
+void mergeSortedArrays(int arr1[], int size1, int arr2[], int size2, int result[]) {
+
+  int i = 0, j = 0, k = 0;
+
+  while (i < size1 && j < size2) {
+    if (arr1[i] < arr2[j]) {
+      result[k] = arr1[i];
+    } 
+    else if (arr1[i] > arr2[j]){
+      result[k] = arr2[j];
+    }
+  }
+}
 
 /*
 Ejercicio 5: Comprobación de Ordenación
@@ -43,7 +99,28 @@ Descripción: Escribe una función que tome un arreglo y su tamaño,
 y luego devuelva 1 si el arreglo está ordenado en orden ascendente,
   0 si no está ordenado, y -1 si está ordenado en orden descendente.
 */
-int checkSorted(int arr[], int size) { return -2; }
+int checkSorted(int arr[], int size) {
+  
+  int asc = 0, des = 0;
+  for (int i = 0; i < size; i++) {
+    if (arr[i] < arr[i + 1]) {
+      asc++;
+    }
+    if (arr[i] > arr[i + 1]) {
+      des++;
+    }
+  }
+
+  if (asc == size) {
+    return 1;
+  }
+  else if (des == size) {
+    return -1;
+  }
+  else {
+    return 0;
+  }
+}
 
 /*
 Ejercicio 6: Información de una Biblioteca
@@ -52,7 +129,6 @@ biblioteca, hay libros, y cada libro tiene un autor. Queremos organizar esta
 información utilizando estructuras anidadas en C. Escribe la función para
 inicializar la información de un libro.
 */
-
 typedef struct {
   char nombre[50];
   int anioNacimiento;
@@ -64,8 +140,14 @@ typedef struct {
   int anioPublicacion;
 } Libro;
 
-void inicializarLibro(Libro *libro, const char *titulo, const char *nombreAutor,
-                      int anioNacimiento, int anioPublicacion) {}
+void inicializarLibro(Libro *libro, const char *titulo, const char *nombreAutor, int anioNacimiento, int anioPublicacion){
+
+  strcpy(libro->titulo, titulo);
+  strcpy(libro->autor.nombre, nombreAutor);
+
+  libro->autor.anioNacimiento = anioNacimiento;
+  libro->anioPublicacion = anioPublicacion;
+}
 
 /*
 Ejercicio 7: Lista enlazada de números
@@ -77,11 +159,30 @@ debe apuntar a NULL. La función debe devolver un puntero al primer nodo de la
 lista enlazada.
 Recuerda reservar memoria dinámica para cada nodo usando malloc.
 Puedes guiarte con lo que vimos en las clases (diapos).
-  */
-
+*/
 typedef struct nodo {
   int numero;
   struct nodo *siguiente; // puntero al siguiente nodo
 } Nodo;
 
-Nodo *crearListaEnlazada(int arr[], int size) { return NULL; }
+Nodo *crearListaEnlazada(int arr[], int size) {
+
+  Nodo *lista = NULL;
+  Nodo *nuevoNodo = NULL;
+
+  Nodo *ultimoNodo = NULL;
+
+  for (int i = 0; i < size; i++){
+    nuevoNodo = (Nodo *)malloc(sizeof(Nodo));
+    nuevoNodo->numero = arr[i];
+    nuevoNodo->siguiente = NULL;
+    if (lista == NULL){
+      lista = nuevoNodo;
+    }
+    else{
+      ultimoNodo->siguiente = nuevoNodo;
+    }
+    ultimoNodo = nuevoNodo;
+  }
+  return lista;
+}
